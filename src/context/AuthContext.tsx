@@ -31,18 +31,19 @@ export function AuthProvider({
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
-
     useEffect(() => {
         try {
             const savedUser = localStorage.getItem('bazardor_user');
 
             if (savedUser) {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setUser(JSON.parse(savedUser) as User);
             }
         } catch {
             localStorage.removeItem('bazardor_user');
             setUser(null);
         } finally {
+
             setLoading(false);
         }
     }, []);
