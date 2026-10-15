@@ -14,6 +14,7 @@ export default function Navbar() {
     const [products, setProducts] = useState<Product[]>([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         getCategories().then(setCategories).catch(console.error);
@@ -29,6 +30,16 @@ export default function Navbar() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    // ডানে স্ক্রোল করার ফাংশন
+    const scrollRight = () => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollBy({
+                left: 200,
+                behavior: 'smooth',
+            });
+        }
+    };
 
     return (
         <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200">
@@ -104,17 +115,41 @@ export default function Navbar() {
             </div>
 
             {/* Categories Navigation Bar */}
-            <div className="border-t border-b border-gray-100 bg-gray-50/80 overflow-x-auto no-scrollbar">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 py-2 text-sm whitespace-nowrap">
-                    {categories.map((cat) => {
-                        const isActive = pathname === `/category/${cat.slug}`;
-                        return (
-                            <Link key={cat.id} href={`/category/${cat.slug}`} className={`px-3 py-1.5 rounded-full font-medium transition flex items-center gap-1.5 ${isActive ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-700 hover:bg-gray-200/70'}`}>
-                                <span>{cat.icon}</span>
-                                <span>{cat.nameBn}</span>
-                            </Link>
-                        );
-                    })}
+            <div className="border-t border-b border-gray-100 bg-gray-50/80">
+                <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between">
+                    {/* হরিজন্টাল স্ক্রোলিং কন্টেইনার */}
+                    <div
+                        ref={scrollContainerRef}
+                        className="flex items-center gap-2 py-2.5 text-sm overflow-x-auto scroll-smooth whitespace-nowrap scrollbar-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden grow"
+                    >
+                        {categories.map((cat) => {
+                            const isActive = pathname === `/category/${cat.slug}`;
+                            return (
+                                <Link
+                                    key={cat.id}
+                                    href={`/category/${cat.slug}`}
+                                    className={`px-3 sm:px-3.5 py-1.5 rounded-full font-medium transition inline-flex items-center gap-1.5 shrink-0 ${isActive
+                                        ? 'bg-emerald-600 text-white shadow-sm'
+                                        : 'text-gray-700 hover:bg-gray-200/70 bg-white border border-gray-200/60'
+                                        }`}
+                                >
+                                    <span>{cat.icon}</span>
+                                    <span>{cat.nameBn}</span>
+                                </Link>
+                            );
+                        })}
+                    </div>
+
+                    {/* ডান দিকের অ্যারো বাটন (শুধুমাত্র মোবাইল ও ট্যাবলেটের জন্য: flex lg:hidden) */}
+                    <button
+                        onClick={scrollRight}
+                        className="flex lg:hidden items-center justify-center p-1.5 sm:p-2 ml-2 text-gray-600 hover:text-emerald-700 bg-white hover:bg-gray-100 shadow-sm border border-gray-200 rounded-full z-10 shrink-0 transition"
+                        title="আরও ক্যাটাগরি দেখতে ডানে যান"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
                 </div>
             </div>
 

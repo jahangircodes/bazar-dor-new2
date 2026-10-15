@@ -86,7 +86,7 @@ export default async function Home() {
       {/* Section C — All Products */}
       <section id="all-products" className="space-y-6 pt-4">
         <div>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900">সব পণ্য</h2>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-green-600">সব পণ্য</h2>
           <p className="text-sm text-gray-500">সকল নিত্যপ্রয়োজনীয় পণ্যের তালিকা ও আজকের বাজার দর</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
